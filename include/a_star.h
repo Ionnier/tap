@@ -3,6 +3,7 @@
 #include <vector>
 #include <graphs.hpp>
 #include <iostream>
+#include <functional>
 
 using namespace std;
 struct Node {

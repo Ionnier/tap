@@ -3,6 +3,8 @@
 #include <iostream>
 #include <forward_def.h>
 
+template<typename T>
+std::ostream& operator<<(std::ostream& out, const Element<T> &aux);
 template <class T>
 struct Element {
     T value;
@@ -13,6 +15,6 @@ struct Element {
 
     ~Element() = default;
 
-    friend std::ostream& operator<<(std::ostream& out, const Element<T> &aux);
+    friend std::ostream& operator<< <>(std::ostream& out, const Element<T> &aux);
 };
 #endif //TAP_ELEMENT_H

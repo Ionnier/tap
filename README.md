@@ -8,3 +8,6 @@
 5.
    * [Source(1)](/src/a_star.cpp) 
    * [Source(2)](/src/element.cpp)
+
+## L02 
+1. [Source](/unused/setup_openmp.cpp)

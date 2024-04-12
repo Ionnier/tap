@@ -12,7 +12,7 @@ string atomic_message(const string &message) {
 }
 
 int main() {
-    #pragma omp parallel
+#pragma omp parallel
     {
         cout << atomic_message("Hello");
         cout << atomic_message("World");

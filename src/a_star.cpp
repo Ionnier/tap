@@ -1,4 +1,5 @@
 #include "a_star.h"
+#include <functional>
 bool Node::value_is_in(const vector<int> &destination) {
     return std::find_if(destination.begin(), destination.end(),[this](int x) {
         return x == this->myself;

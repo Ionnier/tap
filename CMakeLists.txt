@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.27)
+set(CMAKE_C_COMPILER "/opt/homebrew/bin/gcc-13")
+set(CMAKE_CXX_COMPILER "/opt/homebrew/bin/g++-13")
+set(ENV{CC} "/opt/homebrew/bin/gcc-13")
+set(ENV{CXX} "/opt/homebrew/bin/g++-13")
 project(tap)
 
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*")
@@ -33,3 +37,13 @@ add_executable(
     src/dfs_bfs.cpp
     test/testDfsBfs.cpp
 )
+
+add_executable(
+    test_openmp unused/setup_openmp.cpp
+)
+
+find_package(OpenMP REQUIRED)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(tap PUBLIC OpenMP::OpenMP_CXX)
+    target_link_libraries(test_openmp PUBLIC OpenMP::OpenMP_CXX)
+endif()
