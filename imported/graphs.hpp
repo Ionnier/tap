@@ -11,6 +11,7 @@
 #include<list>
 #include<utility> //pair
 #include <limits>
+#include <vector>
 
 // dbahrim //
 #include <set>
@@ -89,7 +90,8 @@ class Graph {
 		int out_degree(Vertex) const;
 		int in_degree(Vertex) const;
 		list<Vertex> neighbours(Vertex) const; //enumerate all (out-)neighbours of a node
-		list<Vertex> in_neighbours(Vertex) const;
+        vector<Vertex> vector_neighbours(Vertex) const; //enumerate all (out-)neighbours of a node
+        list<Vertex> in_neighbours(Vertex) const;
 		
 		//dynamic operations
 		bool add_edge(Vertex,Vertex, double = 1); //adds a new edge, if it is not already present
@@ -107,6 +109,8 @@ class Graph {
         // @dbahrim contribution //
         void dfs(Vertex *);
         void bfs(Vertex *);
+        void isolate(Vertex v);
+        void lexBfs();
         // end of                //
 
 	private:

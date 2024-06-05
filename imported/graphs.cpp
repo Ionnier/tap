@@ -1,4 +1,5 @@
 #include "graphs.hpp"
+#include "partition_refinement.h"
 
 //constructors
 
@@ -71,6 +72,24 @@ list<Vertex> Graph::neighbours(Vertex v) const {
 	 for(Vertex u : Out.at(v)._list)
 	  out_list.push_back(u);
 	return out_list;
+}
+
+vector<Vertex> Graph::vector_neighbours(Vertex v) const {
+    vector<Vertex> out_list;
+    if(Out.find(v) != Out.end()){
+        for(auto u : Out.at(v)._list) {
+            out_list.push_back(u);
+        }
+    }
+    return out_list;
+}
+
+void Graph::isolate(Vertex v) {
+    auto neighbours = this->vector_neighbours(v);
+    #pragma omp parallel for
+    for (auto neighbour: neighbours) {
+        remove_edge(neighbour, v);
+    }
 }
 
 list<Vertex> Graph::in_neighbours(Vertex v) const {
@@ -201,4 +220,42 @@ Vertex Graph::add_node(void){
 	Vertex v = gen_id();
 	add_node(v);
 	return v;
+}
+
+void Graph::lexBfs() {
+    // Creating a partition refinement with all nodes in the graph
+    auto s = vector<Vertex>();
+    for (auto &x: this->vertices) {
+        s.push_back(x);
+    }
+    std::reverse(s.begin(), s.end());
+    auto d = PartitionRefinement<Vertex>::init(s);
+    vector<Vertex> h;
+
+    while (!d.isEmpty()) {
+        // extract one by one
+        cout << d;
+        auto hey = d.first()->getFirst();
+        h.push_back(hey->value);
+        d.remove(hey);
+        vector<Vertex> asd;
+        for (auto &e: this->vector_neighbours(hey->value)) {
+            bool isValid = true;
+            for (auto &ee: h) {
+                if (ee == e) {
+                    isValid = false;
+                }
+            }
+            if (isValid) {
+                asd.push_back(e);
+            }
+        }
+
+        d.refine(asd);
+    }
+
+    for (auto &i: h) {
+        cout<< i << " ";
+    }
+
 }

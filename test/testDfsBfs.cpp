@@ -7,7 +7,7 @@
 
 int main() {
     Graph g;
-    ifstream f("./facebook/0.edges");
+    ifstream f("../facebook/0.edges");
 
     int x, y;
 
