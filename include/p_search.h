@@ -7,4 +7,5 @@ using namespace std;
 #ifndef TAP_P_SEARCH_H
 #define TAP_P_SEARCH_H
 list<unsigned int> p_dfs(unsigned int,Graph&);
+list<unsigned int> p_bfs(unsigned int,Graph&);
 #endif //TAP_P_SEARCH_H

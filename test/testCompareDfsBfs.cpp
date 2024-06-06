@@ -29,14 +29,17 @@ int main() {
     m.begin();
     dfs(4004, g);
     cout << "Millis dfs graph" << m.end() << endl;
-
+//
+//    m.begin();
+//    bfs(4004, g);
+//    cout << "Millis bfs graph" << m.end() << endl;
+//
     m.begin();
-    bfs(4004, g);
-    cout << "Millis bfs graph" << m.end() << endl;
-
-    m.begin();
-    p_dfs(4004, g);
+    p_dfs(3980, g);
     cout << "Millis p_dfs graph" << m.end() << endl;
+
+    // Bag PBFS
+//    pbfs(g, 4004);
 
 
 }

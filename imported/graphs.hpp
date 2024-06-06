@@ -38,8 +38,10 @@ class Graph {
 		list<Vertex> _list; //adjacency list
 		unordered_map<Vertex,Edge> _map; //index
 	};
-	
-	private:
+
+    //out-neighborhood
+    unordered_map< Vertex, AdjList > Out;
+private:
 		
 	/*flags*/
 	
@@ -52,10 +54,8 @@ class Graph {
 		
 	//number of edges (or arcs, if directed)
 	unsigned int m;
-		
-	//out-neighborhood
-	unordered_map< Vertex, AdjList > Out;
-	//in-neighborhood (unused if undirected)
+
+    //in-neighborhood (unused if undirected)
 	unordered_map< Vertex, AdjList > In;
 		
 	//set of all vertices

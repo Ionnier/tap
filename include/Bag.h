@@ -160,6 +160,9 @@ class Bag {
         elements.push_back(aux);
     }
 public:
+    bool isEmpty() {
+        return elements.empty();
+    }
     vector<PennantTree<T> *>& getElements() {
         return elements;
     }

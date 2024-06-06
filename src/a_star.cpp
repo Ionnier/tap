@@ -56,20 +56,22 @@ ostream& operator<<(ostream& out, const Node &aux) {
 
 Node* Node::a_star(const Graph &graph, const int start, const vector<int> &destination, const function<double(unsigned int)> &h) {
     vector<Node*> close;
-    vector<Node*> open;
-    open.emplace_back(new Node(start, nullptr, 0));
+
+    auto asd = [h](const Node *el1, const Node *el2) {
+        return el1->g + h(el1->myself) > el2->g + h(el2->myself);
+    };
+    const function<bool(const Node*, const Node*)> bsd = asd;
+    priority_queue<Node *, vector<Node *>, function<bool(const Node *, const Node *)>> open(asd);
+
+    open.push(new Node(start, nullptr, 0));
 
     while (true) {
         if (open.empty()) {
             break;
         }
 
-        std::sort(open.begin(), open.end(), [h](const Node *el1, const Node *el2) {
-            return el1->g + h(el1->myself) > el2->g + h(el2->myself);
-        });
-
-        Node* current = open.back();
-        open.pop_back();
+        Node* current = open.top();
+        open.pop();
         close.push_back(current);
 
         if (current->value_is_in(destination)) {
@@ -78,13 +80,11 @@ Node* Node::a_star(const Graph &graph, const int start, const vector<int> &desti
 
         for (auto &y: graph.neighbours(current->myself)) {
             auto s = Node(y, current, current-> g + graph.weight(current->myself, y));
-            if (s.value_is_in(open)) {
-                auto old_s = s.get_value_from(open);
-                if (old_s->g > s.g) {
-                    std::remove_if(open.begin(), open.end(),[old_s](Node * hey) {
-                        return hey == old_s;
-                    });
-                    open.push_back(new Node(s));
+            auto foundInOpen = s.value_is_in(open);
+            if (foundInOpen != nullptr) {
+                if (foundInOpen->g > s.g) {
+                    foundInOpen ->removeMyselfFrom(open);
+                    open.push(new Node(s));
                 }
                 continue;
             }
@@ -100,10 +100,43 @@ Node* Node::a_star(const Graph &graph, const int start, const vector<int> &desti
                 continue;
             }
 
-            open.push_back(new Node(s));
+            open.push(new Node(s));
         }
 
     }
 
     return nullptr;
+}
+
+Node * Node::value_is_in(const priority_queue<Node *, vector<Node *>, function<bool(const Node*, const Node*) > > &destination) {
+    auto copy = destination;
+    while(!copy.empty()) {
+        auto asd = copy.top();
+        if (asd == this) {
+            return asd;
+        }
+        copy.pop();
+    }
+    return nullptr;
+}
+
+bool Node::removeMyselfFrom(priority_queue<Node *, vector<Node *>, function<bool(const Node*, const Node*) > > &destination) {
+    vector<Node *> reserve;
+    auto addBack = [&reserve, &destination](){
+        for (auto &i: reserve) {
+            destination.push(i);
+        }
+    };
+    while(!destination.empty()) {
+        auto asd = destination.top();
+        if (asd == this) {
+            destination.pop();
+            addBack();
+            return true;
+        }
+        reserve.push_back(asd);
+        destination.pop();
+    }
+    addBack();
+    return false;
 }
