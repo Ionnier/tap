@@ -41,6 +41,11 @@ class Graph {
 
     //out-neighborhood
     unordered_map< Vertex, AdjList > Out;
+//in-neighborhood (unused if undirected)
+unordered_map< Vertex, AdjList > In;
+
+    void erase(AdjList&,Vertex);
+
 private:
 		
 	/*flags*/
@@ -55,10 +60,7 @@ private:
 	//number of edges (or arcs, if directed)
 	unsigned int m;
 
-    //in-neighborhood (unused if undirected)
-	unordered_map< Vertex, AdjList > In;
-		
-	//set of all vertices
+    //set of all vertices
 	unordered_set<Vertex> vertices;
 	
 	//garbage: removed vertices
@@ -116,8 +118,8 @@ private:
 	private:
 		
 		void insert(AdjList&,Vertex,double);
-		void erase(AdjList&,Vertex);
-		void make_first(AdjList&,Vertex);
+
+    void make_first(AdjList&,Vertex);
 
         // @dbahrim contribution //
         void _dfs(Vertex *, set<Vertex> &);

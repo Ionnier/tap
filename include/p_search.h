@@ -8,4 +8,7 @@ using namespace std;
 #define TAP_P_SEARCH_H
 list<unsigned int> p_dfs(unsigned int,Graph&);
 list<unsigned int> p_bfs(unsigned int,Graph&);
+list<Vertex> p_frontier_bfs(Vertex s,const Graph& GG);
+list<Vertex> p_dfs2(Vertex s,const Graph& GG);
+list<Vertex> p_bfs2(Vertex s,const Graph& GG);
 #endif //TAP_P_SEARCH_H

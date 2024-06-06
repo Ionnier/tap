@@ -15,6 +15,8 @@ using namespace std;
 int main() {
     Graph g;
     ifstream f("../facebook/facebook_combined.txt");
+    Vertex vertex = 3490;
+    list <Vertex> output;
     TimeMeasurementUtil m;
     int x, y;
     m.begin();
@@ -27,19 +29,36 @@ int main() {
     cout << "Millis read graph" << m.end() << endl;
 
     m.begin();
-    dfs(4004, g);
-    cout << "Millis dfs graph" << m.end() << endl;
+    output = dfs(vertex, g);
+    cout << "Millis dfs graph " << m.end() << " " << output.size() << endl;
+
+    m.begin();
+    output = bfs(vertex, g);
+    cout << "Millis bfs graph" << m.end() << output.size() << endl;
+
+    m.begin();
+    output = p_dfs(vertex, g);
+    cout << "Millis p_dfs graph" << m.end() << " " << output.size() << endl;
+
+//    m.begin();
+//    output = p_dfs2(vertex, g);
+//    cout << "Millis p_dfs2 graph" << m.end() << " " << output.size() << endl;
 //
 //    m.begin();
-//    bfs(4004, g);
-//    cout << "Millis bfs graph" << m.end() << endl;
+//    p_bfs(vertex, g);
+//    cout << "Millis p_bfs graph" << m.end() << endl;
 //
-    m.begin();
-    p_dfs(3980, g);
-    cout << "Millis p_dfs graph" << m.end() << endl;
+//    m.begin();
+//    output = p_bfs2(vertex, g);
+//    cout << "Millis p_bfs2 graph" << m.end() << " " << output.size() << endl;
+//
+//    m.begin();
+//    p_frontier_bfs(vertex, g);
+//    cout << "Millis p_frontier_bfs graph" << m.end() << endl;
+
 
     // Bag PBFS
-//    pbfs(g, 4004);
+//    pbfs(g, vertex);
 
 
 }
