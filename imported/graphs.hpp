@@ -46,13 +46,18 @@ unordered_map< Vertex, AdjList > In;
 
     void erase(AdjList&,Vertex);
 
+//directed flag (the graph is directed if set to true)
+bool is_directed;
+
+    void insert(AdjList&,Vertex,double);
+
+//set of all vertices
+unordered_set<Vertex> vertices;
 private:
 		
 	/*flags*/
-	
-	//directed flag (the graph is directed if set to true)
-	bool is_directed;
-	//weighted flag (the graph is edge-weighted if set to true)
+
+    //weighted flag (the graph is edge-weighted if set to true)
 	bool is_weighted;
 	
 	/*internal structure*/
@@ -60,10 +65,7 @@ private:
 	//number of edges (or arcs, if directed)
 	unsigned int m;
 
-    //set of all vertices
-	unordered_set<Vertex> vertices;
-	
-	//garbage: removed vertices
+    //garbage: removed vertices
 	list<Vertex> dead_vertices;
 	 //generation of a default ID
 	Vertex gen_id(void);
@@ -116,8 +118,6 @@ private:
         // end of                //
 
 	private:
-		
-		void insert(AdjList&,Vertex,double);
 
     void make_first(AdjList&,Vertex);
 
@@ -125,6 +125,76 @@ private:
         void _dfs(Vertex *, set<Vertex> &);
         // end of                //
 		
+};
+
+
+/*---------------------------------------- Parallel Algorithms ----------------------------------*/
+
+#include "bag.hpp"
+
+class ParallelGraphAlgorithms {
+
+private:
+    ParallelGraphAlgorithms();
+
+private:
+    static void make_directed(Graph&);
+    static void isolate(unsigned int,Graph&);
+    static void pdfs_rec(unsigned int,Graph&);
+
+public:
+
+    /*-------------- Edge Isolations -----------------------*/
+
+    static void parallel_dfs(unsigned int,Graph);
+    static void parallel_bfs(unsigned int,Graph);
+
+    /*-------------- PBFS --------------------------------
+    @ssumption 1: vertices are indexed from 0 to n-1
+    @ssumption 2: vectors parent and distance are pre-constructed.
+    */
+
+    struct bfs_t {
+
+        vector<int> _p, _d; //parent, distance
+
+        bfs_t(unsigned n): _p(n), _d(n)	{}
+    };
+
+
+    static void vertex_centric_pbfs(unsigned int,Graph,bfs_t&);
+    static void simple_pbfs(unsigned int,Graph,bfs_t&);
+    static void bitmap_pbfs(unsigned int,Graph,bfs_t&);
+    static void bag_pbfs(unsigned int,Graph,bfs_t&);
+
+private:
+
+    static void process_layer(bag&,bag&,unsigned int,Graph&,bfs_t&);
+
+    /*------------------- Connected Components ----------------------
+    @ssumption 1: vertices are indexed from 0 to n-1
+    @ssumption 2: vectors p,o are pre-constructed.
+    */
+
+public:
+
+    static void algorithm_S(Graph,vector<unsigned int>&,vector<unsigned int>&);
+    static void algorithm_RA(Graph,vector<unsigned int>&,vector<unsigned int>&);
+    static void algorithm_A(Graph,vector<unsigned int>&,vector<unsigned int>&);
+
+private:
+
+    static bool direct_connect(Graph&,vector<unsigned int>&,vector<unsigned int>&); //Lock-free
+    static bool parent_connect(Graph&,vector<unsigned int>&,vector<unsigned int>&);
+    static bool direct_root_connect(Graph&,vector<unsigned int>&,vector<unsigned int>&); //Lock-free
+    static bool parent_root_connect(Graph&,vector<unsigned int>&,vector<unsigned int>&);
+
+    static bool shortcut(Graph&,vector<unsigned int>&,vector<unsigned int>&); //Lock-free
+
+    static void alter(Graph&,vector<unsigned int>&);
+
+    /*------------------- Biconnected Components ----------------------*/
+
 };
 
 #endif
