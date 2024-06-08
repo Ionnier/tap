@@ -24,6 +24,7 @@ struct bag {
 	unsigned int _sz;
 	bag();
 	list<unsigned int> to_list(void) const; //an iterator would be more appropriate
+    vector<unsigned int> to_vector(void) const;
 };
 
 bool bag_is_empty(const bag&);

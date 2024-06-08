@@ -35,7 +35,8 @@ list<unsigned int> dfs(unsigned int s,const Graph& G){
 }
 
 
-list<unsigned int> bfs(unsigned int s,const Graph& G){
+list<unsigned int> bfs(unsigned int s,const Graph& GG){
+    auto G = GG;
 	list<unsigned int> output;
 	unordered_set<unsigned int> visited;
 	queue<unsigned int> q;

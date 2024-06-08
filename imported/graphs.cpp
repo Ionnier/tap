@@ -46,6 +46,13 @@ list<Vertex> Graph::vertex_list(void) const {
 	return _all;
 }
 
+vector<Vertex> Graph::vertex_vector(void) const {
+    vector<Vertex> _all;
+    for(Vertex v: vertices)
+        _all.push_back(v);
+    return _all;
+}
+
 int Graph::degree(Vertex v) const {
 	if(vertices.find(v) == vertices.end())
 	 return -1;

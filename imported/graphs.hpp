@@ -116,6 +116,7 @@ private:
         void isolate(Vertex v);
         void lexBfs();
         // end of                //
+        vector<Vertex> vertex_vector(void) const;
 
 	private:
 

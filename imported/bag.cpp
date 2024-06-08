@@ -41,6 +41,25 @@ list<unsigned int> bag::to_list(void) const {
 	return content;
 }
 
+vector<unsigned int> bag::to_vector(void) const {
+    vector<unsigned int> content;
+
+    for(unsigned int i = 0; i < _S.size(); i++)
+        if(_S[i] != nullptr){
+            queue<pennant*> q;
+            q.push(_S[i]);
+            while(!q.empty()){
+                pennant *p = q.front();
+                q.pop();
+                content.push_back(p->_value);
+                if(p->left != nullptr) q.push(p->left);
+                if(p->right != nullptr) q.push(p->right);
+            }
+        }
+
+    return content;
+}
+
 bool bag_is_empty(const bag& B){
 	return (B._sz == 0);
 }

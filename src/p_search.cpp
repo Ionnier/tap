@@ -4,6 +4,9 @@
 #include <p_search.h>
 #include <stack>
 #include <iostream>
+#include <bag.h>
+
+void process_layer(bag bag1, bag bag2, int distance, Graph graph, vector<int> vector1);
 
 void isolate(Vertex v, Graph& G){
     Graph::AdjList& Nv = G.In[v];
@@ -174,4 +177,56 @@ list<Vertex> p_bfs2(Vertex s, const Graph &GG) {
 
     return output;
 
+}
+
+#pragma omp declare reduction(unite:bag:omp_out=bag_union(omp_out,omp_in))
+
+void process_layer2(bag &in_bag, bag &out_bag, int &distance, const Graph &graph, vector<int> &distances) {
+    const auto GRAIN_SIZE = 2;
+    if (bag_size(in_bag) < GRAIN_SIZE) {
+        #pragma omp parallel for
+        for(auto u : in_bag.to_vector()) {
+            #pragma omp parallel for reduction(unite : out_bag)
+            for (auto v: graph.vector_neighbours(u)) {
+                if (distances[v] == -1) {
+                    distances[v] = distance + 1;
+                    bag_insert(out_bag, v);
+                }
+            }
+        }
+        return;
+    }
+    bag new_bag = bag_split(in_bag);
+    #pragma omp parallel sections reduction(unite : new_bag)
+    {
+        #pragma omp section
+        process_layer2(new_bag, out_bag, distance, graph, distances);
+        #pragma omp section
+        process_layer2(in_bag, out_bag, distance, graph, distances);
+    }
+}
+
+
+list<Vertex> p_bag_bfs(Vertex s, const Graph &G) {
+    vector<int> distances(G.size());
+    list<Vertex> output;
+    #pragma omp parallel for
+    for (auto i: G.vertex_vector()) {
+        distances[i] = -1;
+    }
+    output.push_back(s);
+    distances[s] = 0;
+    int distance = 0;
+    auto V0 = bag();
+    bag_insert(V0, s);
+    while (!bag_is_empty(V0)) {
+        auto Vd1 = bag();
+        process_layer2(V0, Vd1, distance, G, distances);
+        distance += 1;
+        V0 = Vd1;
+        for (auto i: Vd1.to_list()) {
+            output.push_back(i);
+        }
+    }
+    return output;
 }
